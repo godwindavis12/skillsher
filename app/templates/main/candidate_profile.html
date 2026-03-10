@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 900px; margin: 0 auto; padding: 40px;">
+    <!-- Profile Header -->
+    <div style="display: flex; gap: 32px; align-items: flex-start; margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--border-color);">
+        {% if fresher.profile_image != 'default.jpg' %}
+        <img src="{{ url_for('static', filename='uploads/profiles/' ~ fresher.profile_image) }}" alt="Profile" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-color); box-shadow: 0 4px 12px rgba(0,0,0,0.1); flex-shrink: 0;">
+        {% else %}
+        <div style="width: 150px; height: 150px; background: var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 64px; font-weight: 700; color: var(--text-muted); flex-shrink: 0;">
+            {{ fresher.full_name[:1] if fresher.full_name else fresher.username[:1] | upper }}
+        </div>
+        {% endif %}
+        
+        <div style="flex-grow: 1;">
+            <h1 style="margin: 0 0 8px 0;">{{ fresher.full_name or fresher.username }}</h1>
+            <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 16px;">
+                <a href="mailto:{{ fresher.email }}" style="color: var(--text-muted); text-decoration: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" style="vertical-align: middle; margin-right: 4px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    {{ fresher.email }}
+                </a>
+            </p>
+            {% if fresher.resume_url %}
+            <a href="{{ fresher.resume_url }}" target="_blank" class="btn btn-outline" style="padding: 6px 16px; display: inline-flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                Portfolio / LinkedIn
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Profile Content -->
+    <div class="grid-2">
+        <div>
+            {% if fresher.bio %}
+            <div style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">About Me</h3>
+                <div style="color: var(--text-main); line-height: 1.6; white-space: pre-wrap;">{{ fresher.bio }}</div>
+            </div>
+            {% endif %}
+
+            {% if fresher.experience %}
+            <div style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Experience & Projects</h3>
+                <div style="color: var(--text-main); line-height: 1.6; white-space: pre-wrap;">{{ fresher.experience }}</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div>
+            {% if fresher.skills %}
+            <div style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Skills</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    {% for skill in fresher.skills.split(',') %}
+                        {% if skill.strip() %}
+                        <span style="font-size: 13px; padding: 4px 12px; border-radius: 16px; background: rgba(59, 130, 246, 0.1); color: var(--primary-color); font-weight: 500;">
+                            {{ skill.strip() }}
+                        </span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if fresher.education %}
+            <div style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Education</h3>
+                <div style="color: var(--text-main); line-height: 1.6; white-space: pre-wrap;">{{ fresher.education }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

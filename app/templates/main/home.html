@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid-3" style="grid-template-columns: 300px 1fr; gap: 24px;">
+    <!-- Left Sidebar -->
+    <div>
+        {% if current_user.is_authenticated %}
+            <div class="card text-center mb-4" style="padding: 24px 16px;">
+                <div style="height: 50px; background: var(--linkedin-blue); margin: -24px -16px 24px; border-radius: var(--radius) var(--radius) 0 0;"></div>
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: #e0e0e0; margin: -56px auto 12px; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #757575; position: relative;">
+                    {{ current_user.username[0]|upper }}
+                </div>
+                <h3 style="margin-bottom: 4px; font-size: 16px;">{{ current_user.username }}</h3>
+                <p class="text-muted" style="font-size: 13px; margin-bottom: 16px; text-transform: capitalize;">{{ current_user.role }}</p>
+                <a href="{{ url_for(current_user.role + '.dashboard') }}" class="btn btn-outline" style="width: 100%; border-radius: 20px; font-size: 13px; padding: 6px;">Go to Dashboard</a>
+            </div>
+            
+            {% if ai_recommendation %}
+            <div class="card mb-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); position: relative; overflow: hidden; padding: 20px;">
+                <div style="position: absolute; top: 0; right: 0; background: linear-gradient(45deg, var(--linkedin-blue), #00a0dc); color: white; padding: 4px 10px; font-size: 10px; font-weight: bold; border-bottom-left-radius: 8px;">✨ AI Match</div>
+                <h4 style="margin-top: 8px; margin-bottom: 8px; font-size: 15px;">Profile Recommendation</h4>
+                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 12px; line-height: 1.5;">{{ ai_recommendation.message }}</p>
+                {% if ai_recommendation.course %}
+                    <div style="background: white; padding: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 12px;">
+                        <h5 style="font-size: 13px; margin: 0 0 4px; color: var(--linkedin-blue);">{{ ai_recommendation.course.title }}</h5>
+                        <p style="font-size: 11px; margin: 0; color: var(--text-muted);">{{ ai_recommendation.course.category }}</p>
+                    </div>
+                    <a href="{{ ai_recommendation.course.url }}" target="_blank" class="btn btn-primary" style="width: 100%; padding: 6px; font-size: 13px;">Start Learning</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="card mb-4">
+                <h3 style="font-size: 18px; margin-bottom: 12px;">Welcome to Skill Sher</h3>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">Connect with top employers and find the best learning courses to boost your career.</p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <a href="{{ url_for('auth.register') }}?role=fresher" class="btn btn-primary" style="text-align: center; border-radius: 20px; padding: 8px;">Find a Job</a>
+                    <a href="{{ url_for('auth.register') }}?role=employer" class="btn btn-outline" style="text-align: center; border-radius: 20px; padding: 8px;">Hire Freshers</a>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="card" style="padding: 16px;">
+            <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--text-main);">Platform Stats</h4>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
+                <span class="text-muted">Active Jobs</span>
+                <span style="font-weight: 600; color: var(--linkedin-blue);">{{ jobs|length }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                <span class="text-muted">New Courses</span>
+                <span style="font-weight: 600; color: var(--linkedin-blue);">Weekly</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Feed -->
+    <div style="grid-column: 2 / 3;">
+        <div style="display: flex; align-items: center; margin-bottom: 16px;">
+            <hr style="flex: 1; border: none; border-top: 1px solid var(--border-color);">
+            <span style="padding: 0 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Recent Job Postings</span>
+            <hr style="flex: 1; border: none; border-top: 1px solid var(--border-color);">
+        </div>
+        
+        {% for job in jobs %}
+        <div class="card mb-4" style="padding: 20px; border-radius: 12px;">
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                <div style="width: 56px; height: 56px; background: #f3f2ef; border: 1px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--linkedin-blue); font-size: 24px;">
+                    {{ job.employer.username[0]|upper }}
+                </div>
+                <div style="flex: 1;">
+                    <h3 style="margin: 0; font-size: 18px; color: var(--linkedin-blue); font-weight: 600;">{{ job.title }}</h3>
+                    <p style="margin: 4px 0 0; font-size: 14px; font-weight: 500; color: var(--text-main);">{{ job.employer.username }}</p>
+                    <p style="margin: 2px 0 0; color: var(--text-muted); font-size: 13px;">{{ job.location }} • Posted {{ job.posted_at.strftime('%b %d, %Y') }}</p>
+                </div>
+            </div>
+            
+            <div style="margin: 16px 0;">
+                <p style="font-size: 14px; line-height: 1.6; color: rgba(0,0,0,0.8);">{{ job.description[:250] }}...</p>
+                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: #e8f5fd; color: #0a66c2; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600;">{{ job.salary or 'Competitive Salary' }}</span>
+                    <span style="background: #f3f2ef; color: var(--text-main); padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600;">Fresher Level</span>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px solid var(--border-color); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                <span style="font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    {{ (job.id * 7) % 50 + 10 }} freshers viewing
+                </span>
+                
+                {% if current_user.is_authenticated and current_user.role == 'fresher' %}
+                <form method="POST" action="{{ url_for('fresher.apply_job', job_id=job.id) }}" style="margin: 0;">
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 24px; font-size: 14px; border-radius: 24px; font-weight: 600;">Easy Apply</button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}?next=/" class="btn btn-primary" style="padding: 8px 24px; font-size: 14px; border-radius: 24px; font-weight: 600;">Sign in to Apply</a>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="card text-center text-muted" style="padding: 80px 20px; border-radius: 12px;">
+            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1" fill="none" style="margin-bottom: 16px; color: #ccc;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+            <h3 style="margin-bottom: 8px; color: var(--text-main);">No jobs posted yet</h3>
+            <p>Check back later for exciting opportunities.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

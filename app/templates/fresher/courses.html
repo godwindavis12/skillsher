@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mb-4" style="text-align: center;">
+    <h2>Skill Sher Learning</h2>
+    <p class="text-muted">Enhance your skills to become a top candidate.</p>
+</div>
+
+<div class="grid-3">
+    {% for course in courses %}
+    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="height: 140px; background: var(--linkedin-blue); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; font-weight: bold;">
+            {{ course.title[0]|upper }}
+        </div>
+        <div style="padding: 16px; flex: 1; display: flex; flex-direction: column;">
+            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">{{ course.category }}</span>
+            <h4 style="margin: 4px 0 8px;">{{ course.title }}</h4>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">{{ course.description }}</p>
+            
+            <a href="{{ course.url }}" target="_blank" class="btn btn-outline" style="margin-top: auto; text-align: center; width: 100%; display: block;">Start Course</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="card text-center text-muted" style="grid-column: 1 / -1; padding: 40px;">
+        Courses will be added soon by the platform administrator.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

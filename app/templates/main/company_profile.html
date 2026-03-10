@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="margin-bottom: 32px; padding: 40px; display: flex; align-items: flex-start; gap: 32px;">
+    {% if employer.profile_image != 'default.jpg' %}
+    <img src="{{ url_for('static', filename='uploads/profiles/' ~ employer.profile_image) }}" alt="Company Logo" style="width: 120px; height: 120px; border-radius: 16px; object-fit: cover; border: 1px solid var(--border-color);">
+    {% else %}
+    <div style="width: 120px; height: 120px; background: var(--border-color); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 700; color: var(--text-muted); flex-shrink: 0;">
+        {{ employer.company_name[:1] if employer.company_name else employer.username[:1] | upper }}
+    </div>
+    {% endif %}
+
+    <div>
+        <h1 style="margin: 0 0 8px 0;">{{ employer.company_name or employer.username }}</h1>
+        <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 16px;"><a href="mailto:{{ employer.email }}" style="color: var(--text-muted);">{{ employer.email }}</a></p>
+        <div style="line-height: 1.6; color: var(--text-main); white-space: pre-wrap;">{{ employer.bio or "This company hasn't provided a description yet." }}</div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div>
+        <h3 style="margin-bottom: 24px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">Currently Hiring ({{ jobs|length }})</h3>
+        {% if jobs %}
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            {% for job in jobs %}
+            <div class="card">
+                <h4 style="margin: 0 0 8px 0;"><a href="{{ url_for('main.job_detail', job_id=job.id) }}" style="color: var(--text-main); text-decoration: none;">{{ job.title }}</a></h4>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 12px;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" style="vertical-align: middle;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    {{ job.location }} • Posted {{ job.posted_at.strftime('%b %d, %Y') }}
+                </p>
+                <div style="text-align: right;">
+                    <a href="{{ url_for('main.job_detail', job_id=job.id) }}" class="btn btn-outline" style="padding: 4px 12px; font-size: 13px;">View Job</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card text-center" style="padding: 40px 20px;">
+            <p style="color: var(--text-muted);">No open positions at the moment.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h3 style="margin-bottom: 24px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">Required Courses ({{ courses|length }})</h3>
+        {% if courses %}
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            {% for course in courses %}
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <h4 style="margin: 0;">{{ course.title }}</h4>
+                    <span style="font-size: 11px; padding: 2px 8px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: var(--primary-color);">{{ course.category }}</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 12px;">
+                    {{ course.description[:60] + '...' if course.description|length > 60 else course.description }}
+                </p>
+                <div style="display: flex; justify-content: space-between;">
+                    <a href="{{ course.url }}" target="_blank" style="color: var(--primary-color); font-size: 13px; text-decoration: none;">View Course</a>
+                    {% if course.materials_url %}
+                    <a href="{{ url_for('static', filename='uploads/courses/' ~ course.materials_url) }}" target="_blank" class="btn btn-outline" style="padding: 2px 8px; font-size: 12px;">Materials</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card text-center" style="padding: 40px 20px;">
+            <p style="color: var(--text-muted);">This company hasn't created any courses.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

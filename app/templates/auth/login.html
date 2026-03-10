@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-wrapper card">
+    <h2 class="text-center mb-4">Sign in</h2>
+    <p class="text-center mb-4" style="color: var(--text-muted);">Stay updated on your professional world</p>
+    
+    <form method="POST" action="">
+        <div class="form-group">
+            <label class="form-label" for="email">Email or phone</label>
+            <input class="form-control" type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="remember" name="remember">
+            <label for="remember" style="font-size: 14px; color: var(--text-muted);">Remember me</label>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 28px; padding: 14px;">Sign in</button>
+    </form>
+    
+    <div class="text-center mt-4" style="font-size: 14px;">
+        New to Skill Sher? <a href="{{ url_for('auth.register') }}" style="color: var(--linkedin-blue); font-weight: 600; text-decoration: none;">Join now</a>
+    </div>
+</div>
+{% endblock %}

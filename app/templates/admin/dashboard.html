@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mb-4">
+    <h2>Admin Dashboard</h2>
+    <p class="text-muted">Platform Overview Statistics</p>
+</div>
+
+<div class="grid-3">
+    <div class="card text-center">
+        <h2 style="font-size: 48px; color: var(--linkedin-blue);">{{ users|length }}</h2>
+        <p style="color: var(--text-muted); font-weight: 500;">Total Users</p>
+    </div>
+    <div class="card text-center">
+        <h2 style="font-size: 48px; color: var(--linkedin-blue);">{{ jobs|length }}</h2>
+        <p style="color: var(--text-muted); font-weight: 500;">Active Jobs</p>
+    </div>
+    <div class="card text-center">
+        <h2 style="font-size: 48px; color: var(--linkedin-blue);">{{ courses|length }}</h2>
+        <p style="color: var(--text-muted); font-weight: 500;">Learning Materials</p>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <h3>Recent Users</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+        <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+            <th style="padding: 12px; color: var(--text-muted);">Name</th>
+            <th style="padding: 12px; color: var(--text-muted);">Email</th>
+            <th style="padding: 12px; color: var(--text-muted);">Role</th>
+        </tr>
+        {% for u in users %}
+        <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 12px; font-weight: 500;">{{ u.username }}</td>
+            <td style="padding: 12px; color: var(--text-muted);">{{ u.email }}</td>
+            <td style="padding: 12px; color: var(--text-muted); text-transform: capitalize;">{{ u.role }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

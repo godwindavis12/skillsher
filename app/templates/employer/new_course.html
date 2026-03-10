@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2 class="mb-4">Create a Course</h2>
+    <p style="color: var(--text-muted); margin-bottom: 24px;">Add a new course to help candidates prepare for roles.</p>
+    
+    <form method="POST" action="" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="form-label" for="title">Course Title</label>
+            <input class="form-control" type="text" id="title" name="title" placeholder="e.g. Advanced React Architecture" required>
+        </div>
+        
+        <div class="grid-2">
+            <div class="form-group">
+                <label class="form-label" for="category">Category</label>
+                <input class="form-control" type="text" id="category" name="category" placeholder="e.g. Web Development" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="url">Course URL (if external, else your website)</label>
+                <input class="form-control" type="url" id="url" name="url" placeholder="https://..." required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="description">Course Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5" placeholder="What will candidates learn?" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="materials">Upload Course Materials (Optional)</label>
+            <input class="form-control" type="file" id="materials" name="materials" style="padding: 10px;">
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">PDF, PPT, or ZIP file.</p>
+        </div>
+        
+        <div style="display: flex; gap: 16px; margin-top: 32px;">
+            <button type="submit" class="btn btn-primary">Create Course</button>
+            <a href="{{ url_for('employer.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

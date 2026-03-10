@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 32px;">
+    <h2>Learning Center</h2>
+    <p style="color: var(--text-muted);">Explore courses to build your skills and prepare for your dream role.</p>
+</div>
+
+<div class="grid-3">
+    {% for course in courses %}
+    <div class="card" style="display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <h3 style="margin: 0; font-size: 18px;">{{ course.title }}</h3>
+            <span style="font-size: 11px; padding: 2px 8px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: var(--primary-color);">{{ course.category }}</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px; flex-grow: 1;">
+            {{ course.description }}
+        </p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="font-size: 13px; color: var(--text-muted);">
+                By {% if course.employer %}{{ course.employer.company_name or course.employer.username }}{% else %}Admin{% endif %}
+            </div>
+        </div>
+        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <a href="{{ course.url }}" target="_blank" style="color: var(--primary-color); font-size: 14px; font-weight: 500; text-decoration: none;">View Course</a>
+            {% if course.materials_url %}
+            <a href="{{ url_for('static', filename='uploads/courses/' ~ course.materials_url) }}" target="_blank" class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Materials</a>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="card text-center" style="grid-column: 1 / -1; padding: 60px 20px;">
+        <p style="color: var(--text-muted);">No courses available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

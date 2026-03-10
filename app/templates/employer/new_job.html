@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2 class="mb-4">Create a Job Post</h2>
+    
+    <form method="POST" action="">
+        <div class="form-group">
+            <label class="form-label" for="title">Job Title</label>
+            <input class="form-control" type="text" id="title" name="title" placeholder="e.g. Junior Software Engineer" required>
+        </div>
+        
+        <div class="grid-2">
+            <div class="form-group">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" type="text" id="location" name="location" placeholder="e.g. Remote, San Francisco" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="salary">Estimated Salary</label>
+                <input class="form-control" type="text" id="salary" name="salary" placeholder="e.g. $60k - $80k">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="description">Job Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe the role and responsibilities..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="requirements">Requirements</label>
+            <textarea class="form-control" id="requirements" name="requirements" rows="4" placeholder="Skills, education, etc..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="courses">Required Courses (Optional)</label>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">Select courses applicants should complete.</p>
+            <select class="form-control" id="courses" name="courses" multiple style="height: 120px;">
+                {% for course in courses %}
+                    <option value="{{ course.id }}">{{ course.title }} ({{ course.category }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div style="display: flex; gap: 16px; margin-top: 32px;">
+            <button type="submit" class="btn btn-primary">Post Job</button>
+            <a href="{{ url_for('employer.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

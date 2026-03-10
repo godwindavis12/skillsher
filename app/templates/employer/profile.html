@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2 class="mb-4">Company Profile Settings</h2>
+    
+    <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border-color);">
+        {% if current_user.profile_image != 'default.jpg' %}
+        <img src="{{ url_for('static', filename='uploads/profiles/' ~ current_user.profile_image) }}" alt="Profile" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color);">
+        {% else %}
+        <div style="width: 100px; height: 100px; background: var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: var(--text-muted);">
+            {{ current_user.company_name[:1] if current_user.company_name else current_user.username[:1] | upper }}
+        </div>
+        {% endif %}
+        
+        <div>
+            <h3 style="margin-bottom: 8px;">{{ current_user.company_name or current_user.username }}</h3>
+            <p style="color: var(--text-muted); font-size: 14px;">Update your company details to attract top talent.</p>
+        </div>
+    </div>
+    
+    <form method="POST" action="" enctype="multipart/form-data">
+        <div class="grid-2">
+            <div class="form-group">
+                <label class="form-label" for="company_name">Company Name</label>
+                <input class="form-control" type="text" id="company_name" name="company_name" value="{{ current_user.company_name or '' }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="full_name">Your Name (HR Contact)</label>
+                <input class="form-control" type="text" id="full_name" name="full_name" value="{{ current_user.full_name or '' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="email">Contact Email</label>
+            <input class="form-control" type="email" id="email" name="email" value="{{ current_user.email }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="bio">Company Description</label>
+            <textarea class="form-control" id="bio" name="bio" rows="5" placeholder="Tell candidates about your company...">{{ current_user.bio or '' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="profile_image">Update Company Logo</label>
+            <input class="form-control" type="file" id="profile_image" name="profile_image" style="padding: 10px;" accept="image/*">
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">For best results, upload a square image.</p>
+        </div>
+        
+        <div style="display: flex; gap: 16px; margin-top: 32px;">
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+            <a href="{{ url_for('employer.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <a href="{{ url_for('employer.dashboard') }}" style="color: var(--linkedin-blue); text-decoration: none; font-weight: 500;">← Back to Dashboard</a>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+        <div>
+            <h2>{{ job.title }}</h2>
+            <p style="color: var(--text-muted);">{{ job.location }}</p>
+        </div>
+        <span style="background: rgba(10, 102, 194, 0.1); color: var(--linkedin-blue); padding: 4px 12px; border-radius: 16px; font-weight: 600; font-size: 14px;">Active</span>
+    </div>
+    <div style="color: var(--text-muted); font-size: 14px;">
+        <strong>Posted:</strong> {{ job.posted_at.strftime('%B %d, %Y') }}<br>
+        <strong>Salary:</strong> {{ job.salary or 'Not specified' }}
+    </div>
+</div>
+
+<h3 style="margin: 32px 0 16px;">Applicants ({{ applications|length }})</h3>
+
+{% if applications %}
+    {% for app in applications %}
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #757575;">
+                {{ app.applicant.username[0]|upper }}
+            </div>
+            <div>
+                <h4 style="margin: 0; font-size: 16px;">{{ app.applicant.username }}</h4>
+                <p style="margin: 0; color: var(--text-muted); font-size: 14px;">{{ app.applicant.email }}</p>
+                <p style="margin: 0; color: var(--text-muted); font-size: 12px;">Applied {{ app.applied_at.strftime('%B %d, %Y') }}</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-outline" style="padding: 6px 16px; font-size: 14px;">Accept</button>
+            <button class="btn btn-outline" style="padding: 6px 16px; font-size: 14px; border-color: #d32f2f; color: #d32f2f; box-shadow: inset 0 0 0 1px #d32f2f;">Reject</button>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card text-center text-muted" style="padding: 40px;">
+        No applications received yet.
+    </div>
+{% endif %}
+{% endblock %}
